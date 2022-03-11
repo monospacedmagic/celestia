@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "postgresql"
+  url                  = env("DATABASE_URL")
+  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
+  referentialIntegrity = "foreignKeys"
+}
+
+enum Element {
+  PYRO
+  GEO
+  DENDRO
+  CRYO
+  ELECTRO
+  ANEMO
+  HYDRO
+}
+
+enum WeaponType {
+  SWORD
+  CLAYMORE
+  POLEARM
+  BOW
+  CATALYST
+}
+
+model Player {
+  userId BigInt @id
+  element Element?
+  weaponType WeaponType?
+}
