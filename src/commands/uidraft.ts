@@ -1,10 +1,8 @@
 import {
   SlashCommand,
-  CommandOptionType,
   SlashCreator,
   CommandContext,
   ComponentType,
-  ButtonStyle,
   ApplicationCommandPermissionType
 } from 'slash-create';
 import { Elements, WeaponTypes, Parties } from '../db';
