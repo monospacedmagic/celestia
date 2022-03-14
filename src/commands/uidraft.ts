@@ -5,7 +5,7 @@ import {
   ComponentType,
   ApplicationCommandPermissionType
 } from 'slash-create';
-import { Elements, WeaponTypes, Parties } from '../db';
+import { Elements, WeaponTypes, Parties } from '../models';
 
 export default class UiDraftCommand extends SlashCommand {
   constructor(creator: SlashCreator) {
