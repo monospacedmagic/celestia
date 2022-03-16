@@ -1,4 +1,4 @@
-import { PartialEmoji } from "../util";
+import { PartialEmoji } from '../util';
 
 export const Parties = {
   ALLY: new PartialEmoji('ally2', '946860813019398235'),

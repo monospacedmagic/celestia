@@ -13,11 +13,17 @@
 
 ### Required Models
 
-- [ ] Character { id, name, element, weaponType, maxHP, skills, defaultAffliction }
-- [ ] Skill { id, name, element, weaponType, power, accuracy, energyReward, canTargetAllies, isSpecialMove, energyCost }
-- [ ] Encounter { name, title, enemies }
-- [ ] SoloEncounterState { encounterName, player, allyStates { [ number: { hp, energy, afflictions } ] }, enemyStates { [ number: { hp, energy, afflictions } ] }, isComplete }
+- [x] Character { id, name, element, weaponType, maxHP, skills, defaultAffliction }
+- [x] Affliction enum
+- [x] Encounter { name, title, enemies }
+- [x] SoloEncounterState { encounterName, player, allyStates { [ index: { hp, energy, afflictions } ] }, enemyStates { [ index: { hp, energy, afflictions } ] }, isComplete }
 
 ### Required Classes
 
-- [ ] Encounter
+- [ ] Skill { name, slot, passive=false, element=Elements.NONE, weaponType=WeaponTypes.NONE, emoji=null, canTargetAllies=false, power=0, accuracy=null, cooldown=0, energyReward=0, energyCost=0 }
+- [ ] EncounterController (handles all interactions with encounter state) (only solo encounters for now)
+- [ ] .loadState(playerId: number)
+- [ ] .startEncounter(ctx)
+- [ ] .getActionOrder() => [ { index: number, party: Parties } ]
+- [ ] .handlePlayerInput(move: Move, target?: Number)
+- [ ] .chooseActions()

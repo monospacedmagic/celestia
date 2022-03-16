@@ -14,10 +14,10 @@ export class WeaponTypeEmoji {
  * stringified into pretty emojis for Discord
  */
 export const WeaponTypes = {
+  NONE: new WeaponTypeEmoji(WeaponType.NONE, 'none', '946841412169785386'),
   SWORD: new WeaponTypeEmoji(WeaponType.SWORD, 'sword', '946495728019206174'),
   CLAYMORE: new WeaponTypeEmoji(WeaponType.CLAYMORE, 'claymore', '946495848278261760'),
   POLEARM: new WeaponTypeEmoji(WeaponType.POLEARM, 'polearm', '946495989706027078'),
   BOW: new WeaponTypeEmoji(WeaponType.BOW, 'bow', '946496187580694558'),
-  CATALYST: new WeaponTypeEmoji(WeaponType.CATALYST, 'catalyst', '946496465524641793'),
-  NONE: new WeaponTypeEmoji(null, 'none', '946841412169785386')
+  CATALYST: new WeaponTypeEmoji(WeaponType.CATALYST, 'catalyst', '946496465524641793')
 } as const;

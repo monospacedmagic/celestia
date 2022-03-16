@@ -14,6 +14,7 @@ datasource db {
 }
 
 enum Element {
+  NONE
   PYRO
   GEO
   DENDRO
@@ -24,6 +25,7 @@ enum Element {
 }
 
 enum WeaponType {
+  NONE
   SWORD
   CLAYMORE
   POLEARM
@@ -31,8 +33,50 @@ enum WeaponType {
   CATALYST
 }
 
+enum Affliction {
+  PYRO
+  CRYO
+  ELECTRO
+  HYDRO
+}
+
 model Player {
   userId BigInt @id
   element Element?
   weaponType WeaponType?
+  soloParty Character[]
+  soloEncounterStates SoloEncounterState[]
+}
+
+model Character {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(255)
+  isEnemy Boolean
+  element Element
+  weaponType WeaponType
+  maxHP Int
+  skills String[]
+  defaultAfflictions Affliction[]
+  ownerId BigInt?
+  owner Player? @relation(fields: [ownerId], references: [userId], onDelete: Cascade)
+  encounters Encounter[]
+}
+
+model Encounter {
+  name String @id
+  title String @db.VarChar(255)
+  enemies Character[]
+  soloStates SoloEncounterState[]
+}
+
+model SoloEncounterState {
+  id Int @id @default(autoincrement())
+  encounterName String
+  playerId BigInt
+  startedAt DateTime @default(now())
+  allyStates Json
+  enemyStates Json
+  isComplete Boolean
+  encounter Encounter @relation(fields: [encounterName], references: [name], onDelete: SetNull)
+  player Player @relation(fields: [playerId], references: [userId], onDelete: Cascade)
 }
