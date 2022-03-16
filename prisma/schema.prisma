@@ -44,8 +44,10 @@ model Player {
   userId BigInt @id
   element Element?
   weaponType WeaponType?
-  soloParty Character[]
-  soloEncounterStates SoloEncounterState[]
+  energy Int @default(0)
+  skills String[]
+  characters Character[] @relation()
+  soloEncounterStates SoloEncounterState[] @relation()
 }
 
 model Character {
@@ -54,19 +56,23 @@ model Character {
   isEnemy Boolean
   element Element
   weaponType WeaponType
-  maxHP Int
+  maxHp Int
+  energy Int @default(0)
   skills String[]
   defaultAfflictions Affliction[]
   ownerId BigInt?
   owner Player? @relation(fields: [ownerId], references: [userId], onDelete: Cascade)
-  encounters Encounter[]
+  isDeployed Boolean
+  encounters Encounter[] @relation()
+  asAlly Ally[] @relation()
+  asEnemy Enemy[] @relation()
 }
 
 model Encounter {
   name String @id
   title String @db.VarChar(255)
-  enemies Character[]
-  soloStates SoloEncounterState[]
+  enemies Character[] @relation()
+  soloStates SoloEncounterState[] @relation()
 }
 
 model SoloEncounterState {
@@ -74,9 +80,33 @@ model SoloEncounterState {
   encounterName String
   playerId BigInt
   startedAt DateTime @default(now())
-  allyStates Json
-  enemyStates Json
-  isComplete Boolean
+  allyIDs Int[]
+  enemyIDs Int[]
+  isComplete Boolean @default(false)
   encounter Encounter @relation(fields: [encounterName], references: [name], onDelete: SetNull)
   player Player @relation(fields: [playerId], references: [userId], onDelete: Cascade)
+  allies Ally[] @relation()
+  enemies Enemy[] @relation()
+}
+
+model Ally {
+  id Int @id @default(autoincrement())
+  characterId Int
+  character Character @relation(fields: [characterId], references: [id])
+  encounterStateId Int
+  encounterState SoloEncounterState @relation(fields: [encounterStateId], references: [id])
+  hp Int
+  energy Int
+  afflictions Affliction[]
+}
+
+model Enemy {
+  id Int @id @default(autoincrement())
+  characterId Int
+  character Character @relation(fields: [characterId], references: [id])
+  encounterStateId Int
+  encounterState SoloEncounterState @relation(fields: [encounterStateId], references: [id])
+  hp Int
+  energy Int
+  afflictions Affliction[]
 }
