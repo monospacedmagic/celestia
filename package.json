@@ -1,7 +1,7 @@
 {
-  "name": "slash-create-template",
-  "version": "1.0.0",
-  "description": "A template for slash-create",
+  "name": "Celestia",
+  "version": "0.1.0-dev",
+  "description": "A fun little Genshin Impact-inspired turn-based combat simulator for Discord",
   "main": "dist/index.js",
   "scripts": {
     "sync": "slash-up sync",

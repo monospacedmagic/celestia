@@ -2,7 +2,7 @@ import { Element } from '@prisma/client';
 export { Element };
 
 export class ElementEmoji {
-  constructor(public item: Element, public name: string, public id: string) {}
+  constructor(public element: Element, public name: string, public id: string) {}
 
   toString() {
     return `<:${this.name}:${this.id}>`;
@@ -23,3 +23,12 @@ export const Elements = {
   ANEMO: new ElementEmoji(Element.ANEMO, 'anemo', '945441005094719508'),
   HYDRO: new ElementEmoji(Element.HYDRO, 'hydro', '945442188924452894')
 } as const;
+
+export const ELEMENT_EMOJI_MAP: Map<Element, ElementEmoji> = new Map<Element, ElementEmoji>(
+  Object.values(Element).map((_element) => [
+    _element,
+    Object.values(Elements).find(({ element }) => {
+      _element === element;
+    })
+  ])
+);

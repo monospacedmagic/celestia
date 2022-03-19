@@ -2,7 +2,7 @@ import { WeaponType } from '@prisma/client';
 export { WeaponType };
 
 export class WeaponTypeEmoji {
-  constructor(public item: WeaponType, public name: string, public id: string) {}
+  constructor(public weaponType: WeaponType, public name: string, public id: string) {}
 
   toString() {
     return `<:${this.name}:${this.id}>`;
@@ -21,3 +21,12 @@ export const WeaponTypes = {
   BOW: new WeaponTypeEmoji(WeaponType.BOW, 'bow', '946496187580694558'),
   CATALYST: new WeaponTypeEmoji(WeaponType.CATALYST, 'catalyst', '946496465524641793')
 } as const;
+
+export const WEAPONTYPE_EMOJI_MAP: Map<WeaponType, WeaponTypeEmoji> = new Map<WeaponType, WeaponTypeEmoji>(
+  Object.values(WeaponType).map((_weaponType) => [
+    _weaponType,
+    Object.values(WeaponTypes).find(({ weaponType }) => {
+      _weaponType === weaponType;
+    })
+  ])
+);

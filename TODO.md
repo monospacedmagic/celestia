@@ -20,10 +20,10 @@
 
 ### Required Classes
 
-- [ ] Skill { name, slot, effect, passive=false, element=Elements.NONE, weaponType=WeaponTypes.NONE, emoji=null, canTargetAllies=false, power=0, accuracy=null, cooldown=0, energyReward=0, energyCost=0 }
+- [x] Skill { name, slot, effect, passive=false, element=Elements.NONE, weaponType=WeaponTypes.NONE, emoji=null, canTargetAllies=false, power=0, accuracy=null, cooldown=0, energyReward=0, energyCost=0 }
 - [ ] SoloEncounter (handles all interactions with solo encounter state)
 - [x] async .create(playerId: number, encounterName: string) (constructor)
-- [ ] async .startEncounter(ctx)
+- [x] async .startEncounter(ctx)
 - [ ] async .getActionOrder() => [ { index: number, party: Parties } ]
 - [ ] async .handlePlayerInput(move: Move, target?: Number)
 - [ ] async .chooseActions()

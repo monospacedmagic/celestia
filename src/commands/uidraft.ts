@@ -57,7 +57,7 @@ export default class UiDraftCommand extends SlashCommand {
     await ctx.defer();
     await ctx.send(
       '<:celestia:945101835763580998> ***Kampfbeginn*** <:celestia:945101835763580998>\n\n' +
-        +'**Zugreihenfolge**\n' +
+        '**Zugreihenfolge**\n' +
         `${Elements.ANEMO}${WeaponTypes.POLEARM}┊██████████┊${Parties.ALLY} **Xiao** (0/20)\n` +
         `${Elements.HYDRO}${WeaponTypes.BOW}┊██████████┊${Parties.ALLY} **Ren** (0/30)\n` +
         `${Elements.GEO}${WeaponTypes.CLAYMORE}┊██████████┊${Parties.ALLY} **2B** (0/40)\n` +

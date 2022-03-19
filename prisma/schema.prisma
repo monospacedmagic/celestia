@@ -33,11 +33,17 @@ enum WeaponType {
   CATALYST
 }
 
-enum Affliction {
-  PYRO
-  CRYO
-  ELECTRO
-  HYDRO
+enum Party {
+  ALLY
+  ENEMY
+}
+
+enum SkillSlot {
+  PRIMARY
+  SECONDARY
+  TERTIARY
+  EXTRA
+  SPECIAL
 }
 
 model Player {
@@ -45,7 +51,7 @@ model Player {
   element Element?
   weaponType WeaponType?
   energy Int @default(0)
-  skills String[]
+  learnedSkills PlayerLearnedSkill[] @relation()
   characters Character[] @relation()
   soloEncounterStates SoloEncounterState[] @relation()
 }
@@ -58,14 +64,40 @@ model Character {
   weaponType WeaponType
   maxHp Int
   energy Int @default(0)
-  skills String[]
-  defaultAfflictions Affliction[]
+  learnedSkills CharacterLearnedSkill[] @relation()
+  defaultStatusEffects String[]
   ownerId BigInt?
   owner Player? @relation(fields: [ownerId], references: [userId], onDelete: Cascade)
   isDeployed Boolean
   encounters Encounter[] @relation()
   asAlly Ally[] @relation()
   asEnemy Enemy[] @relation()
+}
+
+model LearnedSkill {
+  name String @id
+  learnedByPlayers PlayerLearnedSkill[] @relation()
+  learnedByCharacters CharacterLearnedSkill[] @relation()
+}
+
+model PlayerLearnedSkill {
+  playerId BigInt
+  player Player @relation(fields: [playerId], references: [userId])
+  skillName String
+  skill LearnedSkill @relation(fields: [skillName], references: [name])
+  equippedIn SkillSlot?
+
+  @@id(fields: [playerId, skillName])
+}
+
+model CharacterLearnedSkill {
+  characterId Int
+  character Character @relation(fields: [characterId], references: [id])
+  skillName String
+  skill LearnedSkill @relation(fields: [skillName], references: [name])
+  equippedIn SkillSlot?
+
+  @@id(fields: [characterId, skillName])
 }
 
 model Encounter {
@@ -91,22 +123,24 @@ model SoloEncounterState {
 
 model Ally {
   id Int @id @default(autoincrement())
+  party Party @default(ALLY)
   characterId Int
   character Character @relation(fields: [characterId], references: [id])
   encounterStateId Int
   encounterState SoloEncounterState @relation(fields: [encounterStateId], references: [id])
   hp Int
   energy Int
-  afflictions Affliction[]
+  statusEffects String[]
 }
 
 model Enemy {
   id Int @id @default(autoincrement())
+  party Party @default(ENEMY)
   characterId Int
   character Character @relation(fields: [characterId], references: [id])
   encounterStateId Int
   encounterState SoloEncounterState @relation(fields: [encounterStateId], references: [id])
   hp Int
   energy Int
-  afflictions Affliction[]
+  statusEffects String[]
 }

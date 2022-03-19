@@ -1,5 +1,12 @@
-import { SlashCommand, CommandOptionType, SlashCreator, CommandContext, ComponentType, ButtonStyle, ApplicationCommandPermissionType } from 'slash-create';
-import { prisma, Element, Elements } from '../db';
+import {
+  SlashCommand,
+  SlashCreator,
+  CommandContext,
+  ComponentType,
+  ApplicationCommandPermissionType
+} from 'slash-create';
+import { prisma } from '../db';
+import { Element, Elements } from '../models';
 
 export default class VisionCommand extends SlashCommand {
   constructor(creator: SlashCreator) {
@@ -50,81 +57,84 @@ export default class VisionCommand extends SlashCommand {
   async run(ctx: CommandContext) {
     await ctx.defer();
     await ctx.send('<:celestia:945101835763580998> Die Zeit ist gekommen, Reisende. <:celestia:945101835763580998>', {
-      components: [{
-        type: ComponentType.ACTION_ROW,
-        components: [{
-          type: ComponentType.SELECT,
-          custom_id: 'vision_select',
-          placeholder: 'Wähle eine Vision',
-          min_values: 1,
-          max_values: 1,
-          options: [
+      components: [
+        {
+          type: ComponentType.ACTION_ROW,
+          components: [
             {
-              label: 'Pyro',
-              value: 'pyro',
-              emoji: Elements.PYRO
-            },
-            {
-              label: 'Geo',
-              value: 'geo',
-              emoji: Elements.GEO
-            },
-            {
-              label: 'Dendro',
-              value: 'dendro',
-              emoji: Elements.DENDRO
-            },
-            {
-              label: 'Cryo',
-              value: 'cryo',
-              emoji: Elements.CRYO
-            },
-            {
-              label: 'Electro',
-              value: 'electro',
-              emoji: Elements.ELECTRO
-            },
-            {
-              label: 'Anemo',
-              value: 'anemo',
-              emoji: Elements.ANEMO
-            },
-            {
-              label: 'Hydro',
-              value: 'hydro',
-              emoji: Elements.HYDRO
+              type: ComponentType.SELECT,
+              custom_id: 'vision_select',
+              placeholder: 'Wähle eine Vision',
+              min_values: 1,
+              max_values: 1,
+              options: [
+                {
+                  label: 'Pyro',
+                  value: 'pyro',
+                  emoji: Elements.PYRO
+                },
+                {
+                  label: 'Geo',
+                  value: 'geo',
+                  emoji: Elements.GEO
+                },
+                {
+                  label: 'Dendro',
+                  value: 'dendro',
+                  emoji: Elements.DENDRO
+                },
+                {
+                  label: 'Cryo',
+                  value: 'cryo',
+                  emoji: Elements.CRYO
+                },
+                {
+                  label: 'Electro',
+                  value: 'electro',
+                  emoji: Elements.ELECTRO
+                },
+                {
+                  label: 'Anemo',
+                  value: 'anemo',
+                  emoji: Elements.ANEMO
+                },
+                {
+                  label: 'Hydro',
+                  value: 'hydro',
+                  emoji: Elements.HYDRO
+                }
+              ]
             }
           ]
-        }]
-      }]
-    });
-    ctx.registerComponent('vision_select',
-      async (selectCtx) => {
-        let player = await prisma.player.findUnique({
-          where: {
-            userId: Number(selectCtx.user.id)
-          }
-        })
-        if (player) {
-          await selectCtx.send('Du hast bereits deine Vision empfangen.', {ephemeral: true});
-          return;
         }
-        await prisma.player.upsert({
-          where: {
-            userId: Number(selectCtx.user.id)
-          },
-          update: {
-            element: Element[selectCtx.values[0].toUpperCase()]
-          },
-          create: {
-            userId: Number(selectCtx.user.id),
-            element: Element[selectCtx.values[0].toUpperCase()]
-          }
-        });
-        await selectCtx.editParent(
-          `Your vision is: **${selectCtx.values[0].charAt(0).toUpperCase() + selectCtx.values[0].slice(1)}**`,
-          {components: []});
+      ]
+    });
+    ctx.registerComponent('vision_select', async (selectCtx) => {
+      let player = await prisma.player.findUnique({
+        where: {
+          userId: Number(selectCtx.user.id)
+        }
+      });
+      if (player) {
+        await selectCtx.send('Du hast bereits deine Vision empfangen.', { ephemeral: true });
+        return;
       }
-    );
+      await prisma.player.upsert({
+        where: {
+          userId: Number(selectCtx.user.id)
+        },
+        update: {
+          element: Element[selectCtx.values[0].toUpperCase()]
+        },
+        create: {
+          userId: Number(selectCtx.user.id),
+          element: Element[selectCtx.values[0].toUpperCase()]
+        }
+      });
+      await selectCtx.editParent(
+        `Your vision is: **${selectCtx.values[0].charAt(0).toUpperCase() + selectCtx.values[0].slice(1)}**`,
+        { components: [] }
+      );
+    });
   }
 }
