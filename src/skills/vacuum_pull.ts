@@ -2,7 +2,8 @@ import { Ally, Character, Element, Enemy, Player, SkillSlot, WeaponType } from '
 import { SoloEncounter } from '../models';
 import { Skill } from '../models/skill';
 
-export const vacuumPull: Skill = new Skill('Vakuumsog', SkillSlot.PRIMARY, {
+export const vacuumPull: Skill = new Skill('Vakuumsog', SkillSlot.SECONDARY, {
+  description: 'Entfernt Pyro/Cryo/Electro/Hydro, gibt 3 Elementarenergie bei Erfolg',
   element: Element.ANEMO,
   weaponType: WeaponType.CATALYST,
   accuracy: 100,

@@ -4,6 +4,7 @@ import { SkillEffect, Element, WeaponType } from '.';
 import { PartialEmoji } from '../util';
 
 interface SkillAttributes {
+  description?: string;
   passive?: boolean; // default: false
   element?: Element; // default: Element.NONE
   weaponType?: WeaponType; // default: WeaponType.NONE
@@ -22,6 +23,7 @@ export class Skill {
 
   public name: string;
   public slot: SkillSlot;
+  public description?: string = '';
   public passive: boolean = false;
   public element: Element = Element.NONE;
   public weaponType: WeaponType = WeaponType.NONE;

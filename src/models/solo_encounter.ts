@@ -85,6 +85,10 @@ export class SoloEncounter {
     return [];
   }
 
+  public static async fetch() {
+    // TODO
+  }
+
   public static async create(userId: number, encounterName: string) {
     var encounter = await prisma.encounter.findUnique({
       where: {
