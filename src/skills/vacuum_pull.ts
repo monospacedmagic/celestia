@@ -1,6 +1,6 @@
 import { Ally, Character, Element, Enemy, Player, SkillSlot, WeaponType } from '@prisma/client';
 import { SoloEncounter } from '../models';
-import { Skill } from '.';
+import { Skill } from '../models/skill';
 
 export const vacuumPull: Skill = new Skill('Vakuumsog', SkillSlot.PRIMARY, {
   element: Element.ANEMO,

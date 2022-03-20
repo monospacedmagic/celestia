@@ -122,7 +122,7 @@ interface StatusEffectAttributes {
 }
 
 export class StatusEffect {
-  public static statusEffects: Map<string, StatusEffect>;
+  public static statusEffects: Map<string, StatusEffect> = new Map<string, StatusEffect>();
 
   public name: string;
   public emoji: PartialEmoji;

@@ -1,5 +1,5 @@
 import { Ally, Character, Element, Enemy } from '@prisma/client';
-import { StatusEffect } from '.';
+import { StatusEffect } from '../models/status_effect';
 import { Elements, SoloEncounter } from '../models';
 
 export const pyro: StatusEffect = new StatusEffect('Pyro', Elements.PYRO, {

@@ -1,5 +1,5 @@
 import { Element, SkillSlot, WeaponType } from '@prisma/client';
-import { Skill } from '.';
+import { Skill } from '../models/skill';
 
 export const vacuumWave: Skill = new Skill('Vakuumwelle', SkillSlot.PRIMARY, {
   element: Element.ANEMO,

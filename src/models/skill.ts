@@ -18,7 +18,7 @@ interface SkillAttributes {
 }
 
 export class Skill {
-  public static skills: Map<string, Skill>;
+  public static skills: Map<string, Skill> = new Map<string, Skill>();
 
   public name: string;
   public slot: SkillSlot;
@@ -34,7 +34,7 @@ export class Skill {
   public energyReward: number = 0;
   public energyCost: number = 0;
 
-  public effects?: SkillEffect[];
+  public effects?: SkillEffect[] = [];
 
   constructor(name: string, slot: SkillSlot, attributes: SkillAttributes) {
     this.name = name;
@@ -48,5 +48,3 @@ export class Skill {
     return this;
   }
 }
-
-import '../skills';

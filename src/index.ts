@@ -1,8 +1,9 @@
-import dotenv from 'dotenv';
 import { SlashCreator, FastifyServer } from 'slash-create';
-import fs from 'fs';
-import path from 'path';
+import { getFiles } from 'slash-create/lib/util';
 import CatLoggr from 'cat-loggr/ts';
+import dotenv from 'dotenv';
+import fs from 'fs';
+import path, { extname, join } from 'path';
 
 let dotenvPath = path.join(process.cwd(), '.env');
 if (path.parse(process.cwd()).name === 'dist') dotenvPath = path.join(process.cwd(), '..', '.env');
@@ -39,7 +40,32 @@ creator
       }
     })
   )
-  .registerCommandsIn(path.join(__dirname, 'commands'))
-  .startServer();
+  .registerCommandsIn(path.join(__dirname, 'commands'));
+
+// load skills
+const skillPath = join(__dirname, 'skills');
+const extensions = ['.js', '.cjs'];
+const paths = getFiles(skillPath).filter((file) => extensions.includes(extname(file)));
+for (const filePath of paths) {
+  try {
+    require(filePath);
+  } catch (e) {
+    console.log('error', new Error(`Failed to load skill ${filePath}: ${e}`));
+  }
+}
+
+// load status effects
+const statusEffectPath = join(__dirname, 'status_effects');
+const _extensions = ['.js', '.cjs'];
+const _paths = getFiles(statusEffectPath).filter((file) => _extensions.includes(extname(file)));
+for (const filePath of _paths) {
+  try {
+    require(filePath);
+  } catch (e) {
+    console.log('error', new Error(`Failed to load status effect ${filePath}: ${e}`));
+  }
+}
+
+creator.startServer();
 
 console.log(`Starting server at "${creator.options.serverHost}:${creator.options.serverPort}/interactions"`);
