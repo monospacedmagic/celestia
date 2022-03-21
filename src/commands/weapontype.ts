@@ -102,7 +102,7 @@ export default class WeaponTypeCommand extends SlashCommand {
         ]
       }
     );
-    ctx.registerComponent('vision_select', async (selectCtx) => {
+    ctx.registerComponent('weapontype_select', async (selectCtx) => {
       let player = await prisma.player.findUnique({
         where: {
           userId: Number(selectCtx.user.id)
