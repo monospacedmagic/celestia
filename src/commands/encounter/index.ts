@@ -86,8 +86,8 @@ export default class EncounterCommand extends SlashCommand {
 
   async runStart(ctx: CommandContext): Promise<any> {
     var soloEncounter: SoloEncounter = await SoloEncounter.create(
-      BigInt(ctx.options.player.id),
-      ctx.options.encounter_name
+      BigInt(ctx.options[ctx.subcommands[0]]['player'].id),
+      ctx.options[ctx.subcommands[0]]['encounter_name']
     );
     await soloEncounter.startEncounter(ctx);
   }
