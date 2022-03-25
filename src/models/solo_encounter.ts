@@ -182,7 +182,7 @@ export class SoloEncounter {
     return _components;
   }
 
-  public static async fetch(userId: bigint, messageId: bigint) {
+  public static async fetch(userId: bigint, messageId: bigint): Promise<SoloEncounter | null> {
     var state: LoadedState = await prisma.soloEncounterState.findUnique({
       where: {
         messageId
@@ -213,8 +213,9 @@ export class SoloEncounter {
           }
         }
       }
-    }) as LoadedState;
+    }) as LoadedState | null;
 
+    if (!state) return null;
     return new SoloEncounter(state, state.allies, state.enemies, state.encounter);
   }
 

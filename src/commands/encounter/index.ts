@@ -46,7 +46,11 @@ export default class EncounterCommand extends SlashCommand {
   }
 
   async attackCallback(attackNumber: number, ctx: ComponentContext) {
-    var soloEncounter: SoloEncounter = await SoloEncounter.fetch(BigInt(ctx.user.id), BigInt(ctx.message.id));
+    var soloEncounter: SoloEncounter | null = await SoloEncounter.fetch(BigInt(ctx.user.id), BigInt(ctx.message.id));
+    if (!soloEncounter) {
+      await ctx.send('Du bist nicht Teil dieser Begegnung.', { ephemeral: true });
+      return;
+    }
     await soloEncounter.handlePlayerInput(attackNumber, ctx.values[0]);
     await soloEncounter.updateEncounter(ctx);
   }
