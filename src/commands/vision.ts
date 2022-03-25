@@ -110,24 +110,24 @@ export default class VisionCommand extends SlashCommand {
       ]
     });
     ctx.registerComponent('vision_select', async (selectCtx) => {
-      let player = await prisma.player.findUnique({
+      const player = await prisma.player.findUnique({
         where: {
-          userId: Number(selectCtx.user.id)
+          userId: BigInt(selectCtx.user.id)
         }
       });
-      if (player) {
+      if (player && player.element) {
         await selectCtx.send('Du hast bereits deine Vision empfangen.', { ephemeral: true });
         return;
       }
       await prisma.player.upsert({
         where: {
-          userId: Number(selectCtx.user.id)
+          userId: BigInt(selectCtx.user.id)
         },
         update: {
           element: Element[selectCtx.values[0].toUpperCase()]
         },
         create: {
-          userId: Number(selectCtx.user.id),
+          userId: BigInt(selectCtx.user.id),
           element: Element[selectCtx.values[0].toUpperCase()]
         }
       });

@@ -1,6 +1,7 @@
-import { Ally, Character, Element, Enemy, Player, SkillSlot, WeaponType } from '@prisma/client';
+import { Element, SkillSlot, WeaponType } from '@prisma/client';
 import { SoloEncounter } from '../models';
 import { Skill } from '../models/skill';
+import { LoadedAlly, LoadedEnemy, LoadedPlayer } from '../models/solo_encounter';
 
 export const vacuumPull: Skill = new Skill('Vakuumsog', SkillSlot.SECONDARY, {
   description: 'Entfernt Pyro/Cryo/Electro/Hydro, gibt 3 Elementarenergie bei Erfolg',
@@ -9,14 +10,19 @@ export const vacuumPull: Skill = new Skill('Vakuumsog', SkillSlot.SECONDARY, {
   accuracy: 100,
   energyReward: 3
 }).addEffect(
-  (encounter: SoloEncounter, usedBy: Player | Enemy | Ally, target: (Enemy | Ally) & { character: Character }) => {
-    var foundStatusEffect = target.statusEffects.find((effect) =>
-      ['Pyro', 'Cryo', 'Electro', 'Hydro'].includes(effect)
-    );
-    if (!foundStatusEffect) {
-      return { failed: true };
+  (
+    encounter: SoloEncounter,
+    usedBy: LoadedPlayer | LoadedEnemy | LoadedAlly,
+    ...targets: (LoadedEnemy | LoadedAlly)[]
+  ) => {
+    var target: LoadedAlly | LoadedEnemy = targets[0];
+    var foundStatusEffect: string;
+    for (const element of ['Pyro', 'Cryo', 'Electro', 'Hydro']) {
+      if (element in Object.getOwnPropertyNames(target.statusEffects)) {
+        foundStatusEffect = element;
+        delete target.statusEffects[foundStatusEffect];
+      }
     }
-    target.statusEffects.splice(target.statusEffects.indexOf(foundStatusEffect), 1);
     return { text: `**${foundStatusEffect}** wurde von **${target.character.name}** entfernt.` };
   }
 );

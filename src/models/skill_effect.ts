@@ -1,5 +1,6 @@
 import { Ally, Enemy, Player } from '@prisma/client';
 import { SoloEncounter } from '.';
+import { LoadedAlly, LoadedEnemy, LoadedPlayer } from './solo_encounter';
 
 export interface SkillEffectResult {
   /** silent if null, no special text if undefined */
@@ -9,5 +10,5 @@ export interface SkillEffectResult {
 }
 
 export interface SkillEffect {
-  (encounter: SoloEncounter, usedBy: Player | Ally | Enemy, target?: Ally | Enemy): SkillEffectResult;
+  (encounter: SoloEncounter, usedBy: LoadedPlayer | LoadedAlly | LoadedEnemy, ...targets: (LoadedAlly | LoadedEnemy)[]): SkillEffectResult;
 }

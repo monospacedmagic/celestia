@@ -2,7 +2,7 @@ import { Element } from '@prisma/client';
 export { Element };
 
 export class ElementEmoji {
-  constructor(public element: Element, public name: string, public id: string) {}
+  constructor(public element: Element, public name: string, public id: string, public animated: boolean = false) {}
 
   toString() {
     return `<:${this.name}:${this.id}>`;

@@ -2,7 +2,12 @@ import { WeaponType } from '@prisma/client';
 export { WeaponType };
 
 export class WeaponTypeEmoji {
-  constructor(public weaponType: WeaponType, public name: string, public id: string) {}
+  constructor(
+    public weaponType: WeaponType,
+    public name: string,
+    public id: string,
+    public animated: boolean = false
+  ) {}
 
   toString() {
     return `<:${this.name}:${this.id}>`;

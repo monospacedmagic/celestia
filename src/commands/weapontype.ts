@@ -103,24 +103,24 @@ export default class WeaponTypeCommand extends SlashCommand {
       }
     );
     ctx.registerComponent('weapontype_select', async (selectCtx) => {
-      let player = await prisma.player.findUnique({
+      const player = await prisma.player.findUnique({
         where: {
-          userId: Number(selectCtx.user.id)
+          userId: BigInt(selectCtx.user.id)
         }
       });
-      if (player) {
+      if (player && player.weaponType) {
         await selectCtx.send('Du hast bereits einen Waffentyp ausgewählt.', { ephemeral: true });
         return;
       }
       await prisma.player.upsert({
         where: {
-          userId: Number(selectCtx.user.id)
+          userId: BigInt(selectCtx.user.id)
         },
         update: {
           weaponType: WeaponType[selectCtx.values[0].toUpperCase()]
         },
         create: {
-          userId: Number(selectCtx.user.id),
+          userId: BigInt(selectCtx.user.id),
           weaponType: WeaponType[selectCtx.values[0].toUpperCase()]
         }
       });

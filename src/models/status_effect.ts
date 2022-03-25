@@ -1,5 +1,5 @@
-import { Ally, Enemy, Element } from '@prisma/client';
-import { SoloEncounter } from '.';
+import { Element } from '@prisma/client';
+import { LoadedAlly, LoadedEnemy, LoadedPlayer, RawInteraction, SoloEncounter } from '.';
 import { PartialEmoji } from '../util';
 
 interface StatusEffectResult {
@@ -12,71 +12,136 @@ interface StatusEffectResult {
 }
 
 interface StatusEffectStartTurnHook {
-  (encounter: SoloEncounter, affected: Ally | Enemy): StatusEffectResult;
+  (encounter: SoloEncounter, affected: LoadedAlly | LoadedEnemy): StatusEffectResult | void;
 }
 
 interface StatusEffectPreAttackHook {
-  (encounter: SoloEncounter, affected: Ally | Enemy, attacked: Enemy): StatusEffectResult;
+  (
+    encounter: SoloEncounter,
+    affected: LoadedAlly | LoadedEnemy,
+    attacked: LoadedAlly | LoadedEnemy
+  ): StatusEffectResult | void;
 }
 
 interface StatusEffectPreAttackedHook {
-  (encounter: SoloEncounter, affected: Ally | Enemy, attackedBy: Enemy): StatusEffectResult;
+  (
+    encounter: SoloEncounter,
+    affected: LoadedAlly | LoadedEnemy,
+    attackedBy: LoadedPlayer | LoadedAlly | LoadedEnemy
+  ): StatusEffectResult | void;
 }
 
 interface StatusEffectPreAidHook {
-  (encounter: SoloEncounter, affected: Ally | Enemy, aided: Ally[]): StatusEffectResult;
+  (
+    encounter: SoloEncounter,
+    affected: LoadedAlly | LoadedEnemy,
+    aided: LoadedAlly | LoadedEnemy
+  ): StatusEffectResult | void;
 }
 
 interface StatusEffectPreAidedHook {
-  (encounter: SoloEncounter, affected: Ally | Enemy, aidedBy: Ally): StatusEffectResult;
+  (
+    encounter: SoloEncounter,
+    affected: LoadedAlly | LoadedEnemy,
+    aidedBy: LoadedPlayer | LoadedAlly | LoadedEnemy
+  ): StatusEffectResult | void;
 }
 
 interface StatusEffectPreActHook {
-  (encounter: SoloEncounter, affected: Ally | Enemy, targets: Ally[] | Enemy[]): StatusEffectResult;
+  (
+    encounter: SoloEncounter,
+    affected: LoadedAlly | LoadedEnemy,
+    target: LoadedAlly | LoadedEnemy
+  ): StatusEffectResult | void;
 }
 
 interface StatusEffectAttackHook {
-  (encounter: SoloEncounter, affected: Ally | Enemy, attacked: Enemy[]): StatusEffectResult;
+  (
+    encounter: SoloEncounter,
+    affected: LoadedAlly | LoadedEnemy,
+    attacked: LoadedAlly | LoadedEnemy,
+    interaction: RawInteraction
+  ): StatusEffectResult | void;
 }
 
 interface StatusEffectAttackedHook {
-  (encounter: SoloEncounter, affected: Ally | Enemy, attackedBy: Enemy): StatusEffectResult;
+  (
+    encounter: SoloEncounter,
+    affected: LoadedAlly | LoadedEnemy,
+    attackedBy: LoadedPlayer | LoadedAlly | LoadedEnemy,
+    interaction: RawInteraction
+  ): StatusEffectResult | void;
 }
 
 interface StatusEffectAidHook {
-  (encounter: SoloEncounter, affected: Ally | Enemy, aided: Ally[]): StatusEffectResult;
+  (
+    encounter: SoloEncounter,
+    affected: LoadedAlly | LoadedEnemy,
+    aided: LoadedAlly | LoadedEnemy,
+    interaction: RawInteraction
+  ): StatusEffectResult | void;
 }
 
 interface StatusEffectAidedHook {
-  (encounter: SoloEncounter, affected: Ally | Enemy, aidedBy: Ally): StatusEffectResult;
+  (
+    encounter: SoloEncounter,
+    affected: LoadedAlly | LoadedEnemy,
+    aidedBy: LoadedPlayer | LoadedAlly | LoadedEnemy,
+    interaction: RawInteraction
+  ): StatusEffectResult | void;
 }
 
 interface StatusEffectActHook {
-  (encounter: SoloEncounter, affected: Ally | Enemy, targets: Ally[] | Enemy[]): StatusEffectResult;
+  (
+    encounter: SoloEncounter,
+    affected: LoadedAlly | LoadedEnemy,
+    target: LoadedAlly | LoadedEnemy,
+    interaction: RawInteraction
+  ): StatusEffectResult | void;
 }
 
 interface StatusEffectPostAttackHook {
-  (encounter: SoloEncounter, affected: Ally | Enemy, attacked: Enemy[]): StatusEffectResult;
+  (
+    encounter: SoloEncounter,
+    affected: LoadedAlly | LoadedEnemy,
+    attacked: LoadedAlly | LoadedEnemy
+  ): StatusEffectResult | void;
 }
 
 interface StatusEffectPostAttackedHook {
-  (encounter: SoloEncounter, affected: Ally | Enemy, attackedBy: Enemy): StatusEffectResult;
+  (
+    encounter: SoloEncounter,
+    affected: LoadedAlly | LoadedEnemy,
+    attackedBy: LoadedPlayer | LoadedAlly | LoadedEnemy
+  ): StatusEffectResult | void;
 }
 
 interface StatusEffectPostAidHook {
-  (encounter: SoloEncounter, affected: Ally | Enemy, aided: Ally[]): StatusEffectResult;
+  (
+    encounter: SoloEncounter,
+    affected: LoadedAlly | LoadedEnemy,
+    aided: LoadedAlly | LoadedEnemy
+  ): StatusEffectResult | void;
 }
 
 interface StatusEffectPostAidedHook {
-  (encounter: SoloEncounter, affected: Ally | Enemy, aidedBy: Ally): StatusEffectResult;
+  (
+    encounter: SoloEncounter,
+    affected: LoadedAlly | LoadedEnemy,
+    aidedBy: LoadedPlayer | LoadedAlly | LoadedEnemy
+  ): StatusEffectResult | void;
 }
 
 interface StatusEffectPostActHook {
-  (encounter: SoloEncounter, affected: Ally | Enemy, targets: Ally[] | Enemy[]): StatusEffectResult;
+  (
+    encounter: SoloEncounter,
+    affected: LoadedAlly | LoadedEnemy,
+    target: LoadedAlly | LoadedEnemy
+  ): StatusEffectResult | void;
 }
 
 interface StatusEffectEndTurnHook {
-  (encounter: SoloEncounter, affected: Ally | Enemy): StatusEffectResult;
+  (encounter: SoloEncounter, affected: LoadedAlly | LoadedEnemy): StatusEffectResult | void;
 }
 
 interface StatusEffectHooks {
@@ -117,22 +182,60 @@ interface StatusEffectHooks {
 }
 
 interface StatusEffectAttributes {
+  emoji?: PartialEmoji; // default: undefined (infer from element or weaponType if NONE) (null means no emoji should be shown)
   maxLevel?: number;
   hooks: StatusEffectHooks;
 }
 
 export class StatusEffect {
   public static statusEffects: Map<string, StatusEffect> = new Map<string, StatusEffect>();
+  private static levelNumbers: { [x: number]: string } = {
+    0: '⁰',
+    1: '¹',
+    2: '²',
+    3: '³',
+    4: '⁴',
+    5: '⁵',
+    6: '⁶',
+    7: '⁷',
+    8: '⁸',
+    9: '⁹'
+  };
+  private static turnsLeftNumbers: { [x: number]: string } = {
+    0: '₀',
+    1: '₁',
+    2: '₂',
+    3: '₃',
+    4: '₄',
+    5: '₅',
+    6: '₆',
+    7: '₇',
+    8: '₈',
+    9: '₉'
+  };
 
   public name: string;
-  public emoji: PartialEmoji;
+  public emoji?: PartialEmoji;
   public maxLevel?: number = null;
   public hooks: StatusEffectHooks;
 
-  constructor(name: string, emoji: PartialEmoji, attributes: StatusEffectAttributes) {
+  constructor(name: string, attributes: StatusEffectAttributes) {
     this.name = name;
-    this.emoji = emoji;
     Object.assign(this, attributes);
     StatusEffect.statusEffects[name] = this;
   }
+
+  public static render(ase: ActiveStatusEffect): string {
+    if (ase.statusEffect.emoji == null) return '';
+    const turnsLeft: string = ase.turnsLeft && ase.turnsLeft > 0 ? String(ase.turnsLeft) : '';
+    const level: string = ase.level > 1 ? StatusEffect.levelNumbers[ase.level] : '';
+    return `${turnsLeft}${ase.statusEffect.emoji}${level}`;
+  }
+}
+
+export interface ActiveStatusEffect {
+  name: string;
+  statusEffect: StatusEffect;
+  level?: number;
+  turnsLeft?: number;
 }

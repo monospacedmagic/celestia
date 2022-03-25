@@ -65,7 +65,7 @@ model Character {
   maxHp Int
   energy Int @default(0)
   learnedSkills CharacterLearnedSkill[] @relation()
-  defaultStatusEffects String[]
+  defaultStatusEffects Json // { statusEffectName_level: turnsLeft }
   ownerId BigInt?
   owner Player? @relation(fields: [ownerId], references: [userId], onDelete: Cascade)
   isDeployed Boolean
@@ -109,12 +109,14 @@ model Encounter {
 
 model SoloEncounterState {
   id Int @id @default(autoincrement())
+  messageId BigInt? @unique
   encounterName String
   playerId BigInt
   startedAt DateTime @default(now())
   allyIDs Int[]
   enemyIDs Int[]
   isComplete Boolean @default(false)
+  playerSkillCooldowns Json? @default("{}") // { skillName: turnsLeft }
   encounter Encounter @relation(fields: [encounterName], references: [name], onDelete: SetNull)
   player Player @relation(fields: [playerId], references: [userId], onDelete: Cascade)
   allies Ally[] @relation()
@@ -130,7 +132,8 @@ model Ally {
   encounterState SoloEncounterState @relation(fields: [encounterStateId], references: [id])
   hp Int
   energy Int
-  statusEffects String[]
+  statusEffects Json? @default("{}") // { statusEffectName_level: turnsLeft }
+  skillCooldowns Json? @default("{}") // { skillName: turnsLeft }
 }
 
 model Enemy {
@@ -142,5 +145,6 @@ model Enemy {
   encounterState SoloEncounterState @relation(fields: [encounterStateId], references: [id])
   hp Int
   energy Int
-  statusEffects String[]
+  statusEffects Json? @default("{}") // { statusEffectName_level: turnsLeft }
+  skillCooldowns Json? @default("{}") // { skillName: turnsLeft }
 }
