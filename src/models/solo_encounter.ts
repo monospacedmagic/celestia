@@ -163,22 +163,24 @@ export class SoloEncounter {
       };
       return _component;
     });
-    _components.push({
-      type: ComponentType.ACTION_ROW,
-      components: [
-        {
-          type: ComponentType.SELECT,
-          custom_id: 'special_move_select',
-          placeholder: `Spezialangriff / Manöver`,
-          min_values: 1,
-          max_values: 1,
-          options: specialSkillOptions,
-          disabled: !specialSkillOptions && !this.state.player.learnedSkills.filter((learnedSkill) => {
-            Skill.skills[learnedSkill.skillName].canTargetAllies
-          })
-        }
-      ]
-    });
+    if (specialSkillOptions) {
+      _components.push({
+        type: ComponentType.ACTION_ROW,
+        components: [
+          {
+            type: ComponentType.SELECT,
+            custom_id: 'special_move_select',
+            placeholder: `Spezialangriff / Manöver`,
+            min_values: 1,
+            max_values: 1,
+            options: specialSkillOptions,
+            disabled: !specialSkillOptions && !this.state.player.learnedSkills.filter((learnedSkill) => {
+              Skill.skills[learnedSkill.skillName].canTargetAllies
+            })
+          }
+        ]
+      });
+    }
     return _components;
   }
 
