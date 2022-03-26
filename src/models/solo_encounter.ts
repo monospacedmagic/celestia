@@ -156,7 +156,7 @@ export class SoloEncounter {
             placeholder: `Angriff: ${enemy.character.name}`,
             min_values: 1,
             max_values: 1,
-            options: skillOptions,
+            options: skillOptions ? skillOptions : [{label: 'Disabled', value: 'disabled'}],
             disabled: !skillOptions || !enemy.hp
           }
         ]
@@ -173,7 +173,7 @@ export class SoloEncounter {
             placeholder: `Spezialangriff / Manöver`,
             min_values: 1,
             max_values: 1,
-            options: specialSkillOptions,
+            options: specialSkillOptions ? specialSkillOptions : [{label: 'Disabled', value: 'disabled'}],
             disabled: !specialSkillOptions && !this.state.player.learnedSkills.filter((learnedSkill) => {
               Skill.skills[learnedSkill.skillName].canTargetAllies
             })
