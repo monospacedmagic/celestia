@@ -30,8 +30,6 @@ export const WeaponTypes = {
 export const WEAPONTYPE_EMOJI_MAP: Map<WeaponType, WeaponTypeEmoji> = new Map<WeaponType, WeaponTypeEmoji>(
   Object.values(WeaponType).map((_weaponType) => [
     _weaponType,
-    Object.values(WeaponTypes).find(({ weaponType }) => {
-      _weaponType === weaponType;
-    })
+    Object.values(WeaponTypes).find(({ weaponType }) => _weaponType == weaponType)
   ])
 );

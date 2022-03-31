@@ -27,8 +27,6 @@ export const Elements = {
 export const ELEMENT_EMOJI_MAP: Map<Element, ElementEmoji> = new Map<Element, ElementEmoji>(
   Object.values(Element).map((_element) => [
     _element,
-    Object.values(Elements).find(({ element }) => {
-      _element === element;
-    })
+    Object.values(Elements).find(({ element }) => _element == element)
   ])
 );
