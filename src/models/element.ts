@@ -1,7 +1,8 @@
 import { Element } from '@prisma/client';
+import { PartialEmoji } from 'slash-create';
 export { Element };
 
-export class ElementEmoji {
+export class ElementEmoji implements PartialEmoji {
   constructor(public element: Element, public name: string, public id: string, public animated: boolean = false) {}
 
   toString() {

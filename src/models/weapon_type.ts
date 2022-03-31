@@ -1,7 +1,8 @@
 import { WeaponType } from '@prisma/client';
+import { PartialEmoji } from 'slash-create';
 export { WeaponType };
 
-export class WeaponTypeEmoji {
+export class WeaponTypeEmoji implements PartialEmoji {
   constructor(
     public weaponType: WeaponType,
     public name: string,

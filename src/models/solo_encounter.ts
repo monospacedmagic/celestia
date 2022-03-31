@@ -298,9 +298,9 @@ export class SoloEncounter {
   public static formatCharacter(allyOrEnemy: LoadedAlly | LoadedEnemy) {
     const character: Character & { learnedSkills: CharacterLearnedSkill[] } = allyOrEnemy.character;
     const element: Element = character.element;
-    const elementEmoji: ElementEmoji = ELEMENT_EMOJI_MAP[element];
+    const elementEmoji: ElementEmoji = ELEMENT_EMOJI_MAP.get(element);
     const weaponType: WeaponType = character.weaponType;
-    const weaponTypeEmoji: WeaponTypeEmoji = WEAPONTYPE_EMOJI_MAP[weaponType];
+    const weaponTypeEmoji: WeaponTypeEmoji = WEAPONTYPE_EMOJI_MAP.get(weaponType);
     var hpColumns: number;
     if (allyOrEnemy.hp == character.maxHp) {
       hpColumns = 10;

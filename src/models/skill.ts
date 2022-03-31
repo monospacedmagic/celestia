@@ -1,7 +1,7 @@
 import { SkillSlot } from '@prisma/client';
 import { ComponentSelectOption } from 'slash-create';
 export { SkillSlot };
-import { SkillEffect, Element, WeaponType, ElementEmoji, WeaponTypeEmoji } from '.';
+import { SkillEffect, Element, WeaponType, ElementEmoji, WeaponTypeEmoji, ELEMENT_EMOJI_MAP, WEAPONTYPE_EMOJI_MAP } from '.';
 import { PartialEmoji } from '../util';
 
 export enum SkillTarget {
@@ -71,9 +71,9 @@ export class Skill {
     const emoji: PartialEmoji | undefined = skill.emoji
       ? skill.emoji
       : skill.element
-      ? ElementEmoji[skill.element]
+      ? ELEMENT_EMOJI_MAP.get(skill.element)
       : skill.weaponType
-      ? WeaponTypeEmoji[skill.weaponType]
+      ? WEAPONTYPE_EMOJI_MAP.get(skill.weaponType)
       : undefined;
     const label: string = equippedSkill.cooldown ? `${skill.name} (Cooldown: ${equippedSkill.cooldown})` : skill.name;
     return {
