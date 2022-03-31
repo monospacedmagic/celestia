@@ -156,14 +156,14 @@ export class SoloEncounter {
             placeholder: `Angriff: ${enemy.character.name}`,
             min_values: 1,
             max_values: 1,
-            options: skillOptions ? skillOptions : [{label: 'Disabled', value: 'disabled'}],
-            disabled: !skillOptions || !enemy.hp
+            options: skillOptions.length ? skillOptions : [{label: 'Disabled', value: 'disabled'}],
+            disabled: !skillOptions.length || !enemy.hp
           }
         ]
       };
       return _component;
     });
-    if (specialSkillOptions) {
+    if (specialSkillOptions.length) {
       _components.push({
         type: ComponentType.ACTION_ROW,
         components: [
@@ -173,10 +173,10 @@ export class SoloEncounter {
             placeholder: `Spezialangriff / Manöver`,
             min_values: 1,
             max_values: 1,
-            options: specialSkillOptions ? specialSkillOptions : [{label: 'Disabled', value: 'disabled'}],
-            disabled: !specialSkillOptions && !this.state.player.learnedSkills.filter((learnedSkill) => {
+            options: specialSkillOptions.length ? specialSkillOptions : [{label: 'Disabled', value: 'disabled'}],
+            disabled: !specialSkillOptions.length && !this.state.player.learnedSkills.filter((learnedSkill) => {
               Skill.skills[learnedSkill.skillName].canTargetAllies
-            })
+            }).length
           }
         ]
       });
@@ -327,7 +327,7 @@ export class SoloEncounter {
       energyText = '';
     }
     var statusText: string;
-    if (allyOrEnemy.statusEffects) {
+    if ((allyOrEnemy.statusEffects as Prisma.JsonArray).length) {
       const statusEffectsObj = allyOrEnemy.statusEffects as Prisma.JsonObject;
       const statusEffects: ActiveStatusEffect[] = Object.getOwnPropertyNames(statusEffectsObj).map(
         (statusEffectName: string) => {
